@@ -1,4 +1,4 @@
-from preprocess import Preprocessor
+from preprocess import PreProcessor
 import pandas as pd
 
 
@@ -8,10 +8,7 @@ if __name__ == "__main__":
     
     df = pd.read_csv(path)
     
-    processor = Preprocessor(df)
+    processor = PreProcessor(df)
     cols = processor.seperate_columns(return_cols=True)
     
-    print(cols)    
-    
-    print(df["Pregnancies"].value_counts())
     
