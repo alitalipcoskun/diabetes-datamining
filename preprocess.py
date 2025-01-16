@@ -1,6 +1,6 @@
 
 
-class Preprocessor:
+class PreProcessor:
     def __init__(self, df):
         self.__df = df
         self.__categoric_cols = []
