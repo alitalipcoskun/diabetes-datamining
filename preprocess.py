@@ -1,5 +1,6 @@
 from logger import CustomLogger
-
+import numpy as np
+import pandas as pd
 
 
 
@@ -11,6 +12,13 @@ class PreProcessor:
         self.__numeric_cols = []
         self.__cardinal_cols = []
         self.__log = CustomLogger("preprocess.log")
+        
+        self.__numeric_types = [np.int64, 
+                                np.float64, 
+                                np.int32,
+                                np.float32,
+                                int,
+                                float]
               
     @property
     def categoric_columns(self):
@@ -52,30 +60,39 @@ class PreProcessor:
             self.__verify_treshold(categoric_th)
             self.__verify_treshold(cardinal_th)
             
+            
             df = self.df
 
-
-            categoric_cols = [column for column in df.columns if df[column].dtypes == 'O']
-            numeric_columns = [column for column in df.columns if df[column].dtypes != 'O']
+            self.__log.logger.info("Seperation process of the columns are started")
+            
+            # Categoric columns
+            categoric_columns = [column for column in df.columns if df[column].dtypes == 'O']
             num_but_cats = [column for column in df.columns if df[column].nunique() < categoric_th and df[column].dtypes != 'O']
-
-            cat_but_cardinals = [column for column in categoric_cols if df[column].nunique() > cardinal_th]
-
-            categoric_cols = categoric_cols + num_but_cats
-            categoric_cols = [column for column in categoric_cols if column not in cat_but_cardinals]
-
+            cat_but_cardinals = [column for column in df.columns if df[column].nunique() > cardinal_th and df[column].dtypes == "O"]
+            
+            categoric_columns = categoric_columns + num_but_cats
+            categoric_columns = [column for column in categoric_columns if column not in cat_but_cardinals]
+            
+            # Numeric columns
+            numeric_columns = [column for column in df.columns if (df[column].dtypes != "O")]
             numeric_columns = [column for column in numeric_columns if column not in num_but_cats]
         
             self.__numeric_cols = numeric_columns
-            self.__categoric_cols = categoric_cols
+            self.__categoric_cols = categoric_columns
             self.__cardinal_cols = cat_but_cardinals
+            
+            self.__log.logger.debug(categoric_columns)
+            self.__log.logger.debug(numeric_columns)            
+            self.__log.logger.debug(cat_but_cardinals)
         
             self.__log.logger.info("Preprocessor successfully seperated the columns")
         
             if return_cols:
-                return [categoric_cols, numeric_columns, cat_but_cardinals]
+                return [categoric_columns, numeric_columns, cat_but_cardinals]
         except Exception:
-            self.__log.logger.critical(Exception)
+            self.__log.logger.critical("An error occured")
+        finally:
+            self.__log.logger.info("End of execution of seperate_columns")
             
     def __verify_treshold(self, treshold: int):
         if treshold < 0:
