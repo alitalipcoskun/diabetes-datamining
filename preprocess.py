@@ -73,7 +73,7 @@ class PreProcessor:
             self.__log.logger.info("Preprocessor successfully seperated the columns")
         
             if return_cols:
-                return [categoric_cols, numeric_columns, categoric_cols]
+                return [categoric_cols, numeric_columns, cat_but_cardinals]
         except Exception:
             self.__log.logger.critical(Exception)
             
