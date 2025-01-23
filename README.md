@@ -32,12 +32,12 @@ This header is used for changes to the documentation like README.
 
 
 # Dataset
-The dataset is obtained from ``kaggle``.
-The link is here: ``https://www.kaggle.com/datasets/akshaydattatraykhare/diabetes-dataset``
+This dataset is originally from the National Institute of Diabetes and Digestive and Kidney Diseases. The objective of the dataset is to diagnostically predict whether or not a patient has diabetes, based on certain diagnostic measurements included in the dataset. Several constraints were placed on the selection of these instances from a larger database. In particular, all patients here are females at least 21 years old of Pima Indian heritage.
 
+It is contained from ``https://www.kaggle.com/organizations/uciml``
 
 # Data Mining Course Review
-Data mining is a process to obtain meaningful patterns from data.
+Data mining is a process to obtain meaningful patterns and relationships from data. These relationships may be helpful to solve business problems. It helps businesses to plan their future actions.
 
 ![screenshot](images/readme/chart.png)
 

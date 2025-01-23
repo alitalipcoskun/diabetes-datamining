@@ -9,6 +9,6 @@ if __name__ == "__main__":
     df = pd.read_csv(path)
     
     processor = PreProcessor(df)
-    cols = processor.seperate_columns(return_cols=True)
+
     
     

@@ -1,3 +1,7 @@
+from logger import CustomLogger
+
+
+
 
 
 class PreProcessor:
@@ -6,7 +10,8 @@ class PreProcessor:
         self.__categoric_cols = []
         self.__numeric_cols = []
         self.__cardinal_cols = []
-        
+        self.__log = CustomLogger("preprocess.log")
+              
     @property
     def categoric_columns(self):
         return self.__categoric_cols
@@ -43,24 +48,35 @@ class PreProcessor:
 
         """
         
-        df = self.df
+        try:
+            self.__verify_treshold(categoric_th)
+            self.__verify_treshold(cardinal_th)
+            
+            df = self.df
 
 
-        categoric_cols = [column for column in df.columns if df[column].dtypes == 'O']
-        numeric_columns = [column for column in df.columns if df[column].dtypes != 'O']
-        num_but_cats = [column for column in df.columns if df[column].nunique() < categoric_th and df[column].dtypes != 'O']
+            categoric_cols = [column for column in df.columns if df[column].dtypes == 'O']
+            numeric_columns = [column for column in df.columns if df[column].dtypes != 'O']
+            num_but_cats = [column for column in df.columns if df[column].nunique() < categoric_th and df[column].dtypes != 'O']
 
-        cat_but_cardinals = [column for column in categoric_cols if df[column].nunique() > cardinal_th]
+            cat_but_cardinals = [column for column in categoric_cols if df[column].nunique() > cardinal_th]
 
-        categoric_cols = categoric_cols + num_but_cats
-        categoric_cols = [column for column in categoric_cols if column not in cat_but_cardinals]
+            categoric_cols = categoric_cols + num_but_cats
+            categoric_cols = [column for column in categoric_cols if column not in cat_but_cardinals]
 
-        numeric_columns = [column for column in numeric_columns if column not in num_but_cats]
+            numeric_columns = [column for column in numeric_columns if column not in num_but_cats]
         
-        self.__numeric_cols = numeric_columns
-        self.__categoric_cols = categoric_cols
-        self.__cardinal_cols = cat_but_cardinals
+            self.__numeric_cols = numeric_columns
+            self.__categoric_cols = categoric_cols
+            self.__cardinal_cols = cat_but_cardinals
         
-        if return_cols:
-            return [categoric_cols, numeric_columns, categoric_cols]
-    
+            self.__log.logger.info("Preprocessor successfully seperated the columns")
+        
+            if return_cols:
+                return [categoric_cols, numeric_columns, categoric_cols]
+        except Exception:
+            self.__log.logger.critical(Exception)
+            
+    def __verify_treshold(self, treshold: int):
+        if treshold < 0:
+            raise Exception("Unexpected datatype for treshold value")
