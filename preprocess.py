@@ -79,4 +79,4 @@ class PreProcessor:
             
     def __verify_treshold(self, treshold: int):
         if treshold < 0:
-            raise Exception("Unexpected datatype for treshold value")
+            raise Exception("Invalid value for treshold value.")
