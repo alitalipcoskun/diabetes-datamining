@@ -1,5 +1,7 @@
 import logging
 from logging import handlers
+import os
+import sys
 
 class CustomLogger(object):
     level_relations = {
@@ -11,13 +13,22 @@ class CustomLogger(object):
     
     
     def __init__(self,
+                 log_dir: str = "..",
                  filename: str="logs.log",
                  level: str="debug",
                  when: str="D",
                  back_count:int = 3,
                  format: str = '%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s') -> None:
+        root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), log_dir))
+
+        log_dir = os.path.join(root_dir, "logs")
+
+        os.makedirs(log_dir, exist_ok=True) 
         
-        self.__logger = logging.getLogger(filename)
+    
+        log_path = os.path.join(log_dir, filename)
+        
+        self.__logger = logging.getLogger(log_path)
         str_format = logging.Formatter(format)
         self.logger.setLevel(self.level_relations.get(level))
         

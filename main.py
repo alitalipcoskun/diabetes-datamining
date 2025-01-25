@@ -7,10 +7,10 @@ if __name__ == "__main__":
     path = f"./data/{filename}"
     
     df = pd.read_csv(path)
+    preprocessor = PreProcessor(df=df)
+     
     
-    processor = PreProcessor(df)
-    processor.seperate_columns()
-    processor.log_missing_values()  
+    
 
     
     

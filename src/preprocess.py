@@ -8,12 +8,13 @@ import pandas as pd
 class PreProcessor:
     def __init__(self,
                  df: pd.DataFrame,
-                 log_filename: str = "preprocess.log"):
+                 log_filename: str = "preprocess.log",
+                 log_dir: str="../"):
         self.__df = df
         self.__categoric_cols = []
         self.__numeric_cols = []
         self.__cardinal_cols = []
-        self.__log = CustomLogger(log_filename)
+        self.__log = CustomLogger(filename=log_filename, log_dir=log_dir)
         
         self.__numeric_types = [np.int64, 
                                 np.float64, 
