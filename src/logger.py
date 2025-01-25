@@ -27,16 +27,19 @@ class CustomLogger(object):
         
     
         log_path = os.path.join(log_dir, filename)
+        print(log_path)
         
         self.__logger = logging.getLogger(log_path)
-        str_format = logging.Formatter(format)
         self.logger.setLevel(self.level_relations.get(level))
+        
+        str_format = logging.Formatter(format)
         
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(str_format)
         
-        th = handlers.TimedRotatingFileHandler(filename=filename, when=when, backupCount=back_count, encoding='utf-8')
+        th = handlers.TimedRotatingFileHandler(filename=log_path, when=when, backupCount=back_count, encoding='utf-8')
         th.setFormatter(str_format)
+        
         self.logger.addHandler(console_handler)
         self.logger.addHandler(th)
         
