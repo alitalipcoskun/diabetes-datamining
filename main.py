@@ -1,4 +1,4 @@
-from preprocess import PreProcessor
+from src.preprocess import PreProcessor
 import pandas as pd
 
 
@@ -9,6 +9,8 @@ if __name__ == "__main__":
     df = pd.read_csv(path)
     
     processor = PreProcessor(df)
+    processor.seperate_columns()
+    processor.log_missing_values()  
 
     
     

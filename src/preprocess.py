@@ -1,4 +1,4 @@
-from logger import CustomLogger
+from src.logger import CustomLogger
 import numpy as np
 import pandas as pd
 
@@ -6,12 +6,14 @@ import pandas as pd
 
 
 class PreProcessor:
-    def __init__(self, df):
+    def __init__(self,
+                 df: pd.DataFrame,
+                 log_filename: str = "preprocess.log"):
         self.__df = df
         self.__categoric_cols = []
         self.__numeric_cols = []
         self.__cardinal_cols = []
-        self.__log = CustomLogger("preprocess.log")
+        self.__log = CustomLogger(log_filename)
         
         self.__numeric_types = [np.int64, 
                                 np.float64, 
@@ -93,6 +95,29 @@ class PreProcessor:
             self.__log.logger.critical("An error occured")
         finally:
             self.__log.logger.info("End of execution of seperate_columns")
+            
+    def log_missing_values(self):
+        """
+        The function does logs the null values for each column. It provides insights if the dataframe contains NaN in column.
+        """
+        
+        try:
+            self.__log.logger.info("Checking process of NaN values started.")
+            
+            # Retrieving dataframe
+            df = self.df
+        
+            # Iterating over dataframe
+            for column in df.columns:
+                nan_amount = df[column].isnull().sum()
+                self.__log.logger.info(f"For column {column}, nan value amount is: {nan_amount}")
+        
+        except Exception:
+            self.__log.logger.error("An error occured while checking nan values")
+        
+        finally:
+            self.__log.logger.info("Checking process of NaN values successfully ended.")
+        
             
     def __verify_treshold(self, treshold: int):
         if treshold < 0:
