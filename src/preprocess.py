@@ -1,8 +1,10 @@
 from src.logger import CustomLogger
 import numpy as np
 import pandas as pd
+from functools import singledispatch
 
 
+from src.exceptions.invalid_treshold import InvalidTresholdError
 
 
 class PreProcessor:
@@ -92,8 +94,8 @@ class PreProcessor:
         
             if return_cols:
                 return [categoric_columns, numeric_columns, cat_but_cardinals]
-        except Exception:
-            self.__log.logger.critical("An error occured")
+        except Exception as e:
+            self.__log.logger.critical(f"An error occured! {e}")
         finally:
             self.__log.logger.info("End of execution of seperate_columns")
             
@@ -119,7 +121,22 @@ class PreProcessor:
         finally:
             self.__log.logger.info("Checking process of NaN values successfully ended.")
         
-            
-    def __verify_treshold(self, treshold: int):
+
+    @singledispatch
+    def __verify_treshold(self, treshold):
+        raise InvalidTresholdError(treshold_value=treshold,
+                                   msg="Invalid type of treshold, please change the treshold value to an integer.")
+
+    @__verify_treshold.register(int)
+    def _(self, treshold: int):
         if treshold < 0:
-            raise Exception("Invalid value for treshold value.")
+            raise InvalidTresholdError(treshold_value=treshold,
+                                       msg="The treshold value must be bigger than 0.")
+        # Additional logic for handling valid integer treshold
+
+    @__verify_treshold.register(float)
+    def _(self, treshold: float):
+        raise InvalidTresholdError(treshold_value=treshold,
+                                   msg="Invalid type of treshold, please change the treshold value to an integer.")
+        # Additional logic for handling float treshold
+    

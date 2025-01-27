@@ -8,6 +8,7 @@ if __name__ == "__main__":
     
     df = pd.read_csv(path)
     preprocessor = PreProcessor(df=df)
+    preprocessor.seperate_columns(cardinal_th=0.5)
      
     
     
